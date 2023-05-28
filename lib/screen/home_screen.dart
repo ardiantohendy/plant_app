@@ -23,9 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                   height: 280,
                   decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(18.0),
-                        bottomRight: Radius.circular(18.0)),
+                    borderRadius:
+                        BorderRadius.only(bottomRight: Radius.circular(38.0)),
                     image: DecorationImage(
                         image: AssetImage("assets/images/hutan.jpg"),
                         fit: BoxFit.cover),
