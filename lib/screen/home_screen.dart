@@ -20,16 +20,27 @@ class _HomeScreenState extends State<HomeScreen> {
               const BoxDecoration(color: Color.fromRGBO(131, 118, 79, 100)),
           child: ListView(
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.only(top: 48.8, left: 28.8, right: 28.8),
-                child: Text(
-                  "PlantET",
-                  style: GoogleFonts.amaranth(
-                    // fontSize: currentWidth < 370 ? 46.6 : 52.6,
-                    fontSize: 52.6,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white,
+              Container(
+                height: 300,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(12.0),
+                      bottomRight: Radius.circular(12.0)),
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/hutan.jpg"),
+                      fit: BoxFit.cover),
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(top: 68.8, left: 28.8, right: 28.8),
+                  child: Text(
+                    "PlantET",
+                    style: GoogleFonts.amaranth(
+                      // fontSize: currentWidth < 370 ? 46.6 : 52.6,
+                      fontSize: 52.6,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
