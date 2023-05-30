@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:plant_app/repository/plant_list_repository.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,10 +13,13 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+PlantListRepository plantListRepository = PlantListRepository();
+
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 3, vsync: this);
+    plantListRepository.fetchData();
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -147,6 +151,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       )),
                 ),
               ),
+
+              //contents
+
               SizedBox(
                 height: 50,
                 child: TabBarView(
