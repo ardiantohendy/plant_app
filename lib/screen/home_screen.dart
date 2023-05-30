@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plant_app/repository/plant_list_repository.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
@@ -16,10 +18,12 @@ class HomeScreen extends StatefulWidget {
 PlantListRepository plantListRepository = PlantListRepository();
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  final _pageController = PageController(viewportFraction: 0.887);
+
   @override
   Widget build(BuildContext context) {
     TabController _tabController = TabController(length: 3, vsync: this);
-    plantListRepository.fetchData();
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -155,35 +159,61 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               //contents
 
               SizedBox(
-                height: 50,
+                height: 428.5,
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 16.8, left: 28.8, right: 28.8),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Edible Plants",
-                            style: GoogleFonts.amaranth(
-                              fontSize: 32.6,
-                              fontWeight: FontWeight.w600,
-                              color: const Color.fromARGB(255, 38, 36, 36),
+                    FutureBuilder(
+                      future: plantListRepository.fetchEdibleData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container(
+                            padding: const EdgeInsets.all(120.8),
+                            child: const CircularProgressIndicator.adaptive(
+                              backgroundColor: Colors.white,
                             ),
+                          ); // Tampilkan loading spinner saat proses fetch data masih berjalan
+                        }
+                        if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        }
+                        if (!snapshot.hasData) {
+                          return Text("Error: Ther is no data");
+                        }
+                        return Container(
+                          height: 428.5,
+                          margin: EdgeInsets.only(top: 12.8),
+                          child: PageView(
+                            physics: BouncingScrollPhysics(),
+                            controller: _pageController,
+                            scrollDirection: Axis.horizontal,
+                            children: List.generate(
+                                plantListRepository.ediblePlantList.length,
+                                (index) => GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 28.8),
+                                        // decoration: BoxDecoration(
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(9.6),
+                                        //     image: DecorationImage(
+                                        //         image:
+                                        //             CachedNetworkImageProvider(
+                                        //                 plantListRepository
+                                        //                     .ediblePlantList[
+                                        //                         index]
+                                        //                     .original_url),
+                                        //         fit: BoxFit.fill)),
+                                        child: Text(plantListRepository
+                                            .ediblePlantList[index]
+                                            .common_name),
+                                      ),
+                                    )),
                           ),
-                          Text(
-                            "see all",
-                            style: GoogleFonts.roboto(
-                              fontSize: 18.2,
-                              fontWeight: FontWeight.w400,
-                              color: const Color.fromARGB(255, 81, 177, 255),
-                            ),
-                          )
-                        ],
-                      ),
+                        );
+                      },
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
