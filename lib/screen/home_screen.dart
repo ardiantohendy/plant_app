@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                         unselectedLabelColor: Color(0xFF8a8a8a),
                         labelStyle: GoogleFonts.roboto(
-                            fontSize: 15, fontWeight: FontWeight.w400),
+                            fontSize: 18, fontWeight: FontWeight.w500),
                         unselectedLabelStyle: GoogleFonts.roboto(
                             fontSize: 15, fontWeight: FontWeight.w400),
                         tabs: [
