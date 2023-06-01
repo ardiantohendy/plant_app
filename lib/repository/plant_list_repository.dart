@@ -19,7 +19,10 @@ class PlantListRepository {
 
       for (var item in data["data"]) {
         PlantListModel plantListModel = PlantListModel.fromJson(item);
-        ediblePlantList.add(plantListModel);
+
+        if (ediblePlantList.length < 30) {
+          ediblePlantList.add(plantListModel);
+        }
       }
 
       print(ediblePlantList[0].original_url);

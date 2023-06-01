@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plant_app/repository/plant_list_repository.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,10 +16,9 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-PlantListRepository plantListRepository = PlantListRepository();
-
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final _pageController = PageController(viewportFraction: 0.887);
+  PlantListRepository plantListRepository = PlantListRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -181,37 +181,66 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         if (!snapshot.hasData) {
                           return Text("Error: Ther is no data");
                         }
-                        return Container(
-                          height: 428.5,
-                          margin: EdgeInsets.only(top: 12.8),
-                          child: PageView(
-                            physics: BouncingScrollPhysics(),
-                            controller: _pageController,
-                            scrollDirection: Axis.horizontal,
-                            children: List.generate(
-                                plantListRepository.ediblePlantList.length,
-                                (index) => GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 28.8),
-                                        // decoration: BoxDecoration(
-                                        //     borderRadius:
-                                        //         BorderRadius.circular(9.6),
-                                        //     image: DecorationImage(
-                                        //         image:
-                                        //             CachedNetworkImageProvider(
-                                        //                 plantListRepository
-                                        //                     .ediblePlantList[
-                                        //                         index]
-                                        //                     .original_url),
-                                        //         fit: BoxFit.fill)),
-                                        child: Text(plantListRepository
-                                            .ediblePlantList[index]
-                                            .common_name),
-                                      ),
-                                    )),
-                          ),
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 16.8, left: 28.8, right: 28.8),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Edible Plants",
+                                    style: GoogleFonts.amaranth(
+                                      fontSize: 32.6,
+                                      fontWeight: FontWeight.w600,
+                                      color:
+                                          const Color.fromARGB(255, 38, 36, 36),
+                                    ),
+                                  ),
+                                  Text(
+                                    "see all",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 18.2,
+                                      fontWeight: FontWeight.w400,
+                                      color: const Color.fromARGB(
+                                          255, 81, 177, 255),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 328.5,
+                              margin: EdgeInsets.only(top: 18.8),
+                              child: PageView(
+                                physics: BouncingScrollPhysics(),
+                                controller: _pageController,
+                                scrollDirection: Axis.horizontal,
+                                children: List.generate(
+                                    plantListRepository.ediblePlantList.length,
+                                    (index) => GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 28.8),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(9.6),
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        plantListRepository
+                                                            .ediblePlantList[
+                                                                index]
+                                                            .original_url),
+                                                    fit: BoxFit.cover)),
+                                          ),
+                                        )),
+                              ),
+                            )
+                          ],
                         );
                       },
                     ),
