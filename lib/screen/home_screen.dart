@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:plant_app/connections/get_plants.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plant_app/repository/plant_list_repository.dart';
@@ -21,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final _pageController = PageController(viewportFraction: 0.887);
   PlantListRepository plantListRepository = PlantListRepository();
+  GetPlantList getPlantList = GetPlantList();
 
   @override
   Widget build(BuildContext context) {
@@ -165,26 +167,174 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    SizedBox(
-                      child: fetchFuture(
-                          plantListRepository.fetchEdibleData(),
-                          "Edible Plants",
-                          plantListRepository.ediblePlantList.length,
-                          plantListRepository.ediblePlantList),
+                    FutureBuilder(
+                      future: getPlantList.getEdiblePlantList(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Container(
+                            padding: const EdgeInsets.all(120.8),
+                            child: const CircularProgressIndicator.adaptive(
+                              backgroundColor: Colors.white,
+                            ),
+                          ); // Tampilkan loading spinner saat proses fetch data masih berjalan
+                        }
+                        if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        }
+                        if (!snapshot.hasData) {
+                          return Text("Error: Ther is no data");
+                        }
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 16.8, left: 28.8, right: 28.8),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Edible Plants",
+                                    style: GoogleFonts.amaranth(
+                                      fontSize: 32.6,
+                                      fontWeight: FontWeight.w600,
+                                      color:
+                                          const Color.fromARGB(255, 38, 36, 36),
+                                    ),
+                                  ),
+                                  Text(
+                                    "see all",
+                                    style: GoogleFonts.roboto(
+                                      fontSize: 18.2,
+                                      fontWeight: FontWeight.w400,
+                                      color: const Color.fromARGB(
+                                          255, 81, 177, 255),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Container(
+                              height: 328.5,
+                              margin: EdgeInsets.only(top: 18.8),
+                              child: PageView(
+                                physics: BouncingScrollPhysics(),
+                                controller: _pageController,
+                                scrollDirection: Axis.horizontal,
+                                children: List.generate(
+                                    getPlantList.getEdibleList.length,
+                                    (index) => GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                right: 28.8),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(9.6),
+                                                image: DecorationImage(
+                                                    image:
+                                                        CachedNetworkImageProvider(
+                                                            getPlantList
+                                                                .getEdibleList[
+                                                                    index]
+                                                                .original_url),
+                                                    fit: BoxFit.cover)),
+                                            child: Stack(
+                                              children: [
+                                                Positioned(
+                                                  bottom: 19.2,
+                                                  left: 19.2,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.8),
+                                                    child: BackdropFilter(
+                                                      filter: ImageFilter.blur(
+                                                          sigmaY: 19.2,
+                                                          sigmaX: 19.2),
+                                                      child: Container(
+                                                        height: 36,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                left: 16.72,
+                                                                right: 14.4),
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: Text(
+                                                          getPlantList
+                                                              .getEdibleList[
+                                                                  index]
+                                                              .common_name,
+                                                          style: GoogleFonts
+                                                              .roboto(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      16.8),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        )),
+                              ),
+                            )
+                          ],
+                        );
+                      },
                     ),
+                    // SizedBox(
+                    //   child: fetchFuture(
+                    //       getPlantList.getEdiblePlantList(),
+                    //       "Edible Plants",
+                    //       getPlantList.getEdibleList.length,
+                    //       getPlantList.getEdibleList),
+                    // ),
+                    FutureBuilder(
+                        future: getPlantList.getPoisonusPlantList(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Container(
+                              padding: const EdgeInsets.all(120.8),
+                              child: const CircularProgressIndicator.adaptive(
+                                backgroundColor: Colors.white,
+                              ),
+                            ); // Tampilkan loading spinner saat proses fetch data masih berjalan
+                          }
+                          if (snapshot.hasError) {
+                            return Text("Error: ${snapshot.error}");
+                          }
+                          if (!snapshot.hasData) {
+                            return Text("Error: Ther is no data");
+                          }
+                          return fetchColumnList(
+                              "Poisonus Plants",
+                              getPlantList.getPoisonusList.length,
+                              getPlantList.getPoisonusList);
+                        }),
+                    // SizedBox(
+                    //   child: fetchFuture(
+                    //       getPlantList.getPoisonusPlantList(),
+                    //       "Poisonus Plants",
+                    //       getPlantList.getPoisonusList.length,
+                    //       getPlantList.getPoisonusList),
+                    // ),
                     SizedBox(
                       child: fetchFuture(
-                          plantListRepository.fetchPoisonusData(),
-                          "Poisonus Plants",
-                          plantListRepository.poisonusPlantList.length,
-                          plantListRepository.poisonusPlantList),
-                    ),
-                    SizedBox(
-                      child: fetchFuture(
-                          plantListRepository.fetchIndoorData(),
+                          getPlantList.getIndoorPlantList(),
                           "Indoor Plants",
-                          plantListRepository.indoorPlantList.length,
-                          plantListRepository.indoorPlantList),
+                          getPlantList.getIndoorList.length,
+                          getPlantList.getIndoorList),
                     ),
                   ],
                 ),
@@ -260,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(9.6),
                                 image: DecorationImage(
-                                    image: NetworkImage(
+                                    image: CachedNetworkImageProvider(
                                         plantCategory[index].original_url),
                                     fit: BoxFit.cover)),
                             child: Stack(
@@ -298,6 +448,89 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ],
         );
       },
+    );
+  }
+
+  fetchColumnList(titleName, plantCategoryLength, plantCategory) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 16.8, left: 28.8, right: 28.8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                titleName,
+                style: GoogleFonts.amaranth(
+                  fontSize: 32.6,
+                  fontWeight: FontWeight.w600,
+                  color: const Color.fromARGB(255, 38, 36, 36),
+                ),
+              ),
+              Text(
+                "see all",
+                style: GoogleFonts.roboto(
+                  fontSize: 18.2,
+                  fontWeight: FontWeight.w400,
+                  color: const Color.fromARGB(255, 81, 177, 255),
+                ),
+              )
+            ],
+          ),
+        ),
+        Container(
+          height: 328.5,
+          margin: EdgeInsets.only(top: 18.8),
+          child: PageView(
+            physics: BouncingScrollPhysics(),
+            controller: _pageController,
+            scrollDirection: Axis.horizontal,
+            children: List.generate(
+                plantCategoryLength,
+                (index) => GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 28.8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(9.6),
+                            image: DecorationImage(
+                                image: CachedNetworkImageProvider(
+                                    plantCategory[index].original_url),
+                                fit: BoxFit.cover)),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              bottom: 19.2,
+                              left: 19.2,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4.8),
+                                child: BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                      sigmaY: 19.2, sigmaX: 19.2),
+                                  child: Container(
+                                    height: 36,
+                                    padding: const EdgeInsets.only(
+                                        left: 16.72, right: 14.4),
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      plantCategory[index].common_name,
+                                      style: GoogleFonts.roboto(
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                          fontSize: 16.8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    )),
+          ),
+        )
+      ],
     );
   }
 }
