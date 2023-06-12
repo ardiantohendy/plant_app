@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 class SelectedPlantScreen extends StatefulWidget {
-  const SelectedPlantScreen({super.key});
+  int id;
+  SelectedPlantScreen({required this.id});
 
   @override
   State<SelectedPlantScreen> createState() => _SelectedPlantScreenState();
@@ -11,6 +13,14 @@ class SelectedPlantScreen extends StatefulWidget {
 class _SelectedPlantScreenState extends State<SelectedPlantScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: SafeArea(
+          child: Container(
+        decoration: const BoxDecoration(color: Colors.white),
+        child: ListView(
+          children: [Text(widget.id.toString())],
+        ),
+      )),
+    );
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:plant_app/connections/get_plants.dart';
+import 'package:plant_app/screen/selected_plant_screen.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:plant_app/repository/plant_list_repository.dart';
@@ -295,7 +296,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             children: List.generate(
                 plantCategoryLength,
                 (index) => GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SelectedPlantScreen(
+                                id: plantCategory[index].id),
+                          ),
+                        );
+                      },
                       child: Container(
                         margin: const EdgeInsets.only(right: 28.8),
                         decoration: BoxDecoration(

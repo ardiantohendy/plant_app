@@ -15,7 +15,6 @@ class PlantDetailRepository {
       // Request was successful
       var data = json.decode(response.body);
       // Process the response data as needed
-
       PlantDetailModel plantDetailModel = PlantDetailModel.fromJson(data);
       return plantDetailModel;
     } else {
