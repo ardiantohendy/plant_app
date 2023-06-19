@@ -1,0 +1,3 @@
+class GetPlantDetail {
+  getPlantDetail() async {}
+}
