@@ -95,7 +95,7 @@ class PlantDetailModel {
         leaf_color: json["leaf_color"],
         edible_leaf: json["edible_leaf"],
         description: json["description"],
-        default_image: json["default_image"]["thumbnail"],
+        default_image: json["default_image"]["original_url"],
         original_url: json["original_url"]);
   }
 }
