@@ -6,20 +6,19 @@ import 'package:plant_app/models/plant_detail_model.dart';
 class PlantDetailRepository {
   final String apiKey = "sk-gkki647221314f05c1066";
 
-  fetchPlantDetail(id) async {
-    var url = Uri.parse(
-        "https://perenual.com/api/species/details/${id}?key=sk-gkki647221314f05c1066");
-    var response = await http.get(url);
+  Future<PlantDetailModel> fetchPlantDetail(id) async {
+    final String apiUrl =
+        'https://perenual.com/api/species/details/${id}?key=sk-gkki647221314f05c1066';
+
+    final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
-      // Request was successful
-      var data = json.decode(response.body);
-      // Process the response data as needed
-      PlantDetailModel plantDetailModel = PlantDetailModel.fromJson(data);
-      return plantDetailModel;
+      final data = json.decode(response.body);
+      final plantDetail = PlantDetailModel.fromJson(data);
+
+      return plantDetail;
     } else {
-      // Request failed
-      print('Request failed with status: ${response.statusCode}');
+      throw Exception('Failed to fetch plant detail');
     }
   }
 }
