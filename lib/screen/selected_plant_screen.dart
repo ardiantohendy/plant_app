@@ -51,10 +51,24 @@ class _SelectedPlantScreenState extends State<SelectedPlantScreen> {
             future: plantDetailRepository.fetchPlantDetail(widget.id),
             builder: ((context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  padding: const EdgeInsets.all(120.8),
-                  child: const CircularProgressIndicator.adaptive(
-                    backgroundColor: Colors.white,
+                return Center(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    width: 500,
+                    height: 1000,
+                    child: Center(
+                      child: Text(
+                        "PlantET",
+                        style: GoogleFonts.amaranth(
+                          // fontSize: currentWidth < 370 ? 46.6 : 52.6,
+                          fontSize: 52.6,
+                          fontWeight: FontWeight.w700,
+                          color: Color.fromARGB(255, 39, 37, 37),
+                        ),
+                      ),
+                    ),
                   ),
                 ); // Tampilkan loading spinner saat proses fetch data masih berjalan
               }
@@ -125,10 +139,10 @@ class _SelectedPlantScreenState extends State<SelectedPlantScreen> {
                               padding: const EdgeInsets.only(
                                   top: 38.8, left: 28.8, right: 28.8),
                               child: Text(
-                                "PlantET",
+                                plantDetail!.common_name.toString(),
                                 style: GoogleFonts.amaranth(
                                   // fontSize: currentWidth < 370 ? 46.6 : 52.6,
-                                  fontSize: 62.6,
+                                  fontSize: 32.6,
                                   fontWeight: FontWeight.w700,
                                   color: Colors.white,
                                 ),
@@ -138,7 +152,7 @@ class _SelectedPlantScreenState extends State<SelectedPlantScreen> {
                               padding: const EdgeInsets.only(
                                   top: 6.8, left: 28.8, right: 28.8),
                               child: Text(
-                                "Get free all informations for your plants",
+                                plantDetail!.scientific_name[0],
                                 style: GoogleFonts.roboto(
                                     fontSize: 16.2,
                                     fontWeight: FontWeight.w400,
