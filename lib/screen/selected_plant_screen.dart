@@ -137,7 +137,7 @@ class _SelectedPlantScreenState extends State<SelectedPlantScreen> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
-                                  top: 38.8, left: 28.8, right: 28.8),
+                                  top: 48.8, left: 28.8, right: 28.8),
                               child: Text(
                                 plantDetail!.common_name.toString(),
                                 style: GoogleFonts.amaranth(
@@ -152,7 +152,7 @@ class _SelectedPlantScreenState extends State<SelectedPlantScreen> {
                               padding: const EdgeInsets.only(
                                   top: 6.8, left: 28.8, right: 28.8),
                               child: Text(
-                                plantDetail!.scientific_name[0],
+                                plantDetail!.family,
                                 style: GoogleFonts.roboto(
                                     fontSize: 16.2,
                                     fontWeight: FontWeight.w400,
@@ -165,9 +165,43 @@ class _SelectedPlantScreenState extends State<SelectedPlantScreen> {
                       ],
                     ),
                   ),
-                  Text(plantDetail != null
-                      ? plantDetail!.default_image
-                      : "Waiting..."),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 38.8, left: 28.8, right: 28.8),
+                    child: Text(
+                      plantDetail!.common_name,
+                      style: GoogleFonts.amaranth(
+                        // fontSize: currentWidth < 370 ? 46.6 : 52.6,
+                        fontSize: 32.6,
+                        fontWeight: FontWeight.w700,
+                        color: Color.fromARGB(255, 39, 37, 37),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 18.8, left: 28.8, right: 28.8),
+                    child: Container(
+                      width: 50,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(38.0),
+                            topLeft: Radius.circular(8.0),
+                            topRight: Radius.circular(8.0),
+                            bottomLeft: Radius.circular(8.0)),
+                        color: Color.fromARGB(255, 162, 244, 164),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 8.0, left: 14.0, right: 8.0, bottom: 14.0),
+                        child: Text(
+                          plantDetail!.description,
+                          style: GoogleFonts.roboto(
+                              fontSize: 16.2, fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               );
             }),
